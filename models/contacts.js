@@ -1,12 +1,14 @@
 const { DataTypes } = require("sequelize");
-const crmApp = require("../config/crmApp");
-const LeadStatus = require("../models/leadStatus")
+const crmApp = require("../config/db");
+const { hash } = require("../utils/hash");
+//const LeadStatus = require("../models/leadStatus")
 
 
 const Contact = crmApp.define("Contact",{
     id:{
         type: DataTypes.INTEGER,
         allowNull: false,
+        primaryKey:true
 
     },
     firstName: {

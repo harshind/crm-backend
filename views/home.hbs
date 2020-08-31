@@ -1,0 +1,19 @@
+<div id="content">
+  <!--Main banner image-->
+  <div id="banner_image">
+    <div class="container">
+      <center>
+        <div id="banner_content">
+          <h1>Manage Your Customer Like Never Before</h1>
+          <p>Join us today!! </p>
+          <br />
+          {{#if isUser }}
+          <a href="/logout" class="btn btn-danger btn-lg active">Logout</a>
+          {{else}}
+          <a href="/login" class="btn btn-danger btn-lg active">Login</a>
+          {{/if}}
+        </div>
+      </center>
+    </div>
+  </div>
+</div>

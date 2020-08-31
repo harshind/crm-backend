@@ -1,0 +1,86 @@
+<div class="wrapper"
+  style="background-image: url('static/img/bg-registration-form-2.jpg'); background-repeat: no-repeat;">
+  <div class="inner">
+    <form action="{{action}}" method="{{method}}">
+      <h3>Registration Form</h3>
+      <div class="form-group">
+        <div class="form-wrapper">
+          <label for="fname">First Name</label>
+          <input type="text" id="fname" class="form-control" name="firstName">
+        </div>
+        <div class="form-wrapper">
+          <label for="lname">Last Name</label>
+          <input type="text" id="lname" class="form-control" name="lastName">
+        </div>
+      </div>
+      <div class="form-wrapper">
+        <label for="email">Username</label>
+        <input type="text" id="email" class="form-control" name="username">
+      </div>
+      <div class="form-wrapper">
+        <label for="password">Password</label>
+        <input type="password" id="password" class="form-control" name="password">
+      </div>
+      <div class="form-wrapper">
+        <label for="email">Type</label>
+        <input type="text" id="email" class="form-control" name="type">
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox"> I accept the Terms of Use & Privacy Policy.
+          <span class="checkmark"></span>
+        </label>
+      </div>
+      <button>Register Now</button>
+    </form>
+  </div>
+</div>
+<script>
+  const $addUserForm = document.querySelector("#student-form");
+
+  $addUserForm.addEventListener("submit", event => {
+    event.preventDefault();
+
+    const submitUrl = $addUserForm.action;
+    const submitMethod = $addUserForm.getAttribute("_method");
+    const formData = new FormData($addStudentForm);
+    let userDetail = {};
+    for (const fields of formData.entries()) {
+      const [key, value] = fields;
+      userDetail[key] = value;
+    }
+
+    const config = {
+      method: submitMethod.toUpperCase(),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(userDetail)
+    }
+
+    fetch(submitUrl, config)
+      .then(response => {
+        if (response.status === 200) {
+          return response.json()
+        } else {
+          throw (new Error(response.status))
+        }
+      })
+      .then(data => {
+        alert(data.message);
+        window.location.href = "/dashboard"
+      })
+     .catch(error => {
+        switch (error.message) {
+          case "400":
+            alert("Please check form values...");
+            break;
+          case "500":
+            alert("Please Try after some time...");
+            break;
+          default:
+            console.error(error);
+        }
+      }) 
+  });
+</script>

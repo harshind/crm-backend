@@ -1,11 +1,12 @@
 const { DataTypes } = require("sequelize");
-const crmApp = require("../config/crmApp");
+const crmApp = require("../config/db");
 
 
 const User = crmApp.define("users",{
     id:{
         type: DataTypes.INTEGER,
         allowNull: false,
+        primaryKey:true
 
     },
     firstName: {
@@ -24,7 +25,14 @@ const User = crmApp.define("users",{
           isEmail: true
         }
       },
-    Type:{
+    password:{
+        type: DataTypes.STRING,
+        allowNull: false,
+        set(value) {
+          this.setDataValue("password", hash(value));
+        }
+    },
+    type:{
           type: DataTypes.ENUM,
           values:['Manager',"Admin","Employee","Employee-p"]
         }

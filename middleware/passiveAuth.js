@@ -1,4 +1,4 @@
-const { verify } = require("../utils/jwtService");
+const { verify } = require("../utils/jwtservice");
 
 const passiveAuth = (req, res, next) => {
   const payload = verify(req.cookies.jwt);

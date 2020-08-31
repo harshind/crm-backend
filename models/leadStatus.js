@@ -1,5 +1,7 @@
+
+/*
 const { DataTypes } = require("sequelize");
-const crmApp = require("../config/crmApp");
+const crmApp = require("../config/db");
 const Lead = require("../models/leadsModel")
 
 const LeadStatus = crmApp.define("LeadStatus",{
@@ -21,3 +23,5 @@ const LeadStatus = crmApp.define("LeadStatus",{
 });
 
 module.exports = LeadStatus;
+
+*/

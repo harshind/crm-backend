@@ -1,6 +1,9 @@
 const { Sequelize } = require("sequelize");
-
-const crmApp = new Sequelize(process.env.DB_URL);
+require('dotenv').config()
+const crmApp = new Sequelize(process.env.DB_URL,{
+  host:'localhost',
+  dialect:'postgres'
+});
 
 (async () => {
   try {

@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const crmApp = require("../config/crmApp");
+const crmApp = require("../config/db");
 const serviceStatus = require("../models/serviceStatus")
 
 
@@ -7,15 +7,15 @@ const ServiceRequest = crmApp.define("ServiceRequest",{
     id:{
         type: DataTypes.INTEGER,
         allowNull: false,
+        primaryKey: true
 
     },
-    statusId:{
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references:{
-            model: serviceStatus,
-            key: "id"
-        }
+    status:{
+        type: DataTypes.ENUM({
+            values: ['Created', 'Open', 'InProgress','Released','Cancelled','Completed']
+          }),
+        allowNull:false,
+
     },
     title:{
         type: DataTypes.STRING,
@@ -26,12 +26,9 @@ const ServiceRequest = crmApp.define("ServiceRequest",{
         allowNull: false,
     },
     type:{
-        type: DataTypes.INTEGER,
+        type: DataTypes.ENUM,
+        values:["level-3", "level-2","level-1"],
         allowNull:false,
-        references:{
-            model: Tasks,
-            key: 'id'
-        }
     }
 })
 

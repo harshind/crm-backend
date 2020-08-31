@@ -1,13 +1,14 @@
 const { DataTypes } = require("sequelize");
-const crmApp = require("../config/crmApp");
+const crmApp = require("../config/db");
 const Contact = require("../models/contacts");
-const LeadStatus = require("../models/leadStatus")
+//const LeadStatus = require("../models/leadStatus")
 
 
 const Lead = crmApp.define("Leads",{
     id:{
         type: DataTypes.INTEGER,
         allowNull: false,
+        primaryKey:true
 
     },
     contactId:{
@@ -18,16 +19,15 @@ const Lead = crmApp.define("Leads",{
             key: "id"
         }
     },
-    statusId:{
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references:{
-            model: LeadStatus,
-            key: "id"
-        }
+    status:{
+        type: DataTypes.ENUM({
+            values: ['New', 'Contacted', 'Qualified','Lost','Cancelled','Confirmed']
+          }),
+        allowNull:false,
+
     },
     name:{
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     closeDate:{

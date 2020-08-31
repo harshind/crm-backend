@@ -1,0 +1,82 @@
+<div class="container">
+  <h1></h1>
+  <form id="lead-form" action="{{action}}" method="{{method}}" _method="{{method}}">
+    <label for="fname">First Name</label>
+    <input type="text" id="fname" class="form-control" name="firstName" value="{{contact.firstName}}" placeholder="FirstName">
+    <label for="lname">Last Name</label>
+    <input type="text" id="lname" class="form-control" name="lastName" value="{{contact.lastName}}" placeholder="LastName" >
+    <label for="email">Email</label>
+    <input type="text" id="email" class="form-control" name="email" value="{{contact.email}}" placeholder="Email">
+    <label for="phone">Phone</label>
+    <input type="text" id="phone" class="form-control" name="phone" value="{{contact.phone}}" placeholder="Phone">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" value="{{lead.name}}" placeholder="Name of Agent" required />
+    <br />
+    <label for="amount">Amount:</label>
+    <input type="text" id="amount" name="amount" value="{{lead.amount}}" placeholder="Amount" required />
+    <br />
+    <label for="close-date">Close Date</label>
+    <input type="text" id="close-date" name="closeDate" value="{{lead.closeDate}}" placeholder="Closing Date" required />
+    <br />
+    <label for="status">Status</label>
+    <select class="custom-select" name="status" id="status" size="3">
+      <option value="New" {{#if (ifEquality lead.status "New")}}selected{{/if}}>New</option>
+      <option value="Confirmed" {{#if (ifEquality lead.status "Confirmed")}}selected{{/if}}>Confirmed</option>
+      <option value="Lost" {{#if (ifEquality lead.status "Lost")}}selected{{/if}}>Lost</option>
+      <option value="Contacted" {{#if (ifEquality lead.status "Contacted")}}selected{{/if}}>Contacted</option>
+      <option value="Cancelled" {{#if (ifEquality lead.status "Cancelled")}}selected{{/if}}>Cancelled</option>
+      <option value="Qualified" {{#if (ifEquality lead.status "Qualified")}}selected{{/if}}>Qualified</option>
+    </select>
+    <br />
+    <input class="btn btn-primary" type="submit" value="Add Student" />
+  </form>
+</div>
+<script>
+  const $addLeadForm = document.querySelector("#lead-form");
+
+  $addLeadForm.addEventListener("submit", event => {
+    event.preventDefault();
+
+    const submitUrl = $addLeadForm.action;
+    const submitMethod = $addLeadForm.getAttribute("_method");
+    const formData = new FormData($addLeadForm);
+    let leadDetail = {};
+    for (const fields of formData.entries()) {
+      const [key, value] = fields;
+      leadDetail[key] = value;
+    }
+
+    const config = {
+      method: submitMethod.toUpperCase(),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(leadDetail)
+    }
+
+    fetch(submitUrl, config)
+      .then(response => {
+        if (response.status === 200) {
+          return response.json()
+        } else {
+          throw (new Error(response.status))
+        }
+      })
+      .then(data => {
+        alert(data.message);
+        window.location.href = "/dashboard"
+      })
+     .catch(error => {
+        switch (error.message) {
+          case "400":
+            alert("Please check form values...");
+            break;
+          case "500":
+            alert("Please Try after some time...");
+            break;
+          default:
+            console.error(error);
+        }
+      }) 
+  });
+</script>
