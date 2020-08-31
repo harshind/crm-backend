@@ -10,20 +10,29 @@ const crmRouter = express.Router();
 
 const getAllContacts = async () => {
     const result = await Contact.findAll({
-        limit: 10
+        limit: 10,
+        order: [
+          ['id', 'ASC'],
+        ]
     });
     return JSON.parse(JSON.stringify(result));
   };
 const getAllLeads = async () => {
   const result = await Lead.findAll({
-      limit:10
+      limit:10,
+      order: [
+        ['id', 'ASC'],
+      ]
   });
   return JSON.parse(JSON.stringify(result));
 };
 
 const getAllServiceRequest = async () => {
     const result = await Service.findAll({
-        limit: 10
+        limit: 10,
+        order: [
+          ['id', 'ASC'],
+        ]
     });
     return JSON.parse(JSON.stringify(result));
   };
@@ -58,15 +67,16 @@ crmRouter
     });
     const user = result.get();
     const id = user.id;
+    const sub = user.type
     if (user) {
       const isValidPassword = compareHash(password, user.password);
       if (isValidPassword) {
         const token = sign({
-          sub: user.Type,
+          sub: sub,
           username,
           id: id
         });
-        res.cookie("jwt", token, { httpOnly: true });
+        res.cookie("jwt", token, { httpOnly: true,secure: true,sameSite:None});
         res.status(200).redirect("/dashboard");
       } else {
         res.status(401).send("Invalid User");

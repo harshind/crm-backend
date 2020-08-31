@@ -26,17 +26,8 @@ const Contact = crmApp.define("Contact",{
         validate: {
           isEmail: true
         }
-      },
-    phone:{
-          type: DataTypes.INTEGER,
-          unique: true,
-          validate:{
-              max:10,
-              min:10
-          }
-        }
-    }
-);
+      }
+    });
 
 
 

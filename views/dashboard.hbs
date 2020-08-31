@@ -22,3 +22,61 @@
     </tbody>
   </table>
 </div>
+<div class="container">
+  <h1>Contact</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each contact}}
+      <tr>
+        <th scope="row">{{this.id}}</th>
+        <td>{{this.firstName}}</td>
+        <td>{{this.lastName}}</td>
+        <td>{{this.email}}</td>
+        {{#if isManager }}
+        <td><a href="/update-contact/{{this.id}}">Edit</a></td>
+        {{/if}}
+        {{#if isAdmin }}
+        <td><a href="/update-contact/{{this.id}}">Edit</a></td>
+        {{/if}}
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+<div class="container">
+  <h1>Lead</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Status</th>
+        <th scope="col">ContactId</th>
+        <th scope="col">Close Date</th>
+        <th scope="col">Amount</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {{#each lead}}
+      <tr>
+        <th scope="row">{{this.id}}</th>
+        <td>{{this.name}}</td>
+        <td>{{this.status}}</td>
+        <td>{{this.contactId}}</td>
+        <td>{{this.closeDate}}</td>
+        <td>{{this.amount}}</td>
+        <td><a href="/update-leads/{{this.id}}">Edit</a></td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

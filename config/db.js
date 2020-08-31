@@ -1,7 +1,12 @@
+
 const { Sequelize } = require("sequelize");
-require('dotenv').config()
+const path = require("path");
+//const hostname = '127.0.0.1'
+
+require('dotenv').config({
+  path:path.join(__dirname,"../.env"),
+})
 const crmApp = new Sequelize(process.env.DB_URL,{
-  host:'localhost',
   dialect:'postgres'
 });
 

@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const crmApp = require("../config/db");
-const serviceStatus = require("../models/serviceStatus")
 
 
 const ServiceRequest = crmApp.define("ServiceRequest",{

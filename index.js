@@ -1,13 +1,14 @@
-const port = 3000;
+
+const path = require("path");
 //const hostname = '127.0.0.1'
 
-require('dotenv').config()
-require("./config/db");
+require('dotenv').config({
+  path:path.join(__dirname,"./.env"),
+})
 const express = require("express");
 const expressHbs = require("express-handlebars")
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const path = require("path");
 const auth = require("./middleware/auth");
 const passiveAuth = require("./middleware/passiveAuth");
 const addPrivilage = require("./middleware/addPrivilage");
@@ -16,7 +17,7 @@ const inc = require("./views/helpers/inc");
 const ifEquality = require("./views/helpers/ifEquality");
 const app = express();
 const {crmRouter, getLeadById, getSrById, getContactById, getAllContacts,getAllLeads, getAllServiceRequest} = require("./routes/crmRouter");
-const { hostname } = require('os');
+
 
 // Creating handlebars engine
 const hbs = expressHbs.create({
@@ -47,29 +48,36 @@ const hbs = expressHbs.create({
       });
   });
   
-  app.get("/dashboard", passiveAuth, (request, response) => {
-    const leads = getAllLeads();
-    const sr = getAllServiceRequest();
-    const contacts = getAllContacts();
-    response.status(200).render("home", {
-      layout: "hero",
-      title: "DashBoard",
-      isEmployee: request.jwt ? request.jwt.sub === "Employee" : false,
-      isAdmin: request.jwt ? request.jwt.sub === "Admin" : false,
-      isManager: request.jwt ? request.jwt.sub === "Manager" : false,
-      isEmployeeP : request.jwt ? request.jwt.sub === "Employee-P" : false,
-    });
-  });
+  app.get("/dashboard", passiveAuth, async (request, response) => {
+    try{
+      const lead = await getAllLeads();
+      const sr = await getAllServiceRequest();
+      const contact = await getAllContacts();
+      response.status(200).render("dashboard", {
+        layout: "hero",
+        title: "DashBoard",
+        sr :sr,
+        contact: contact,
+        lead: lead,
+        isEmployee: request.jwt ? request.jwt.sub === "Employee" : false,
+        isAdmin: request.jwt ? request.jwt.sub === "Admin" : false,
+        isManager: request.jwt ? request.jwt.sub === "Manager" : false,
+        isEmployeeP : request.jwt ? request.jwt.sub === "Employee-P" : false,
+      });
+    }catch(e){
+      result.send("error")
+    }
+  })
   
-  app.get("/signup",addPrivilage, (request, response) => {
-    response.status(200).render("signup", {
+  app.get("/signup", (request, response) => {
+    response.status(200).render("signUp", {
       layout: "layout1",
       title: "SignUp",
-      action: "/api/crm",
+      action: "/api/crm/",
       method: "POST"
     });
   });
-  app.get("/login",passiveAuth, (request, response) => {
+  app.get("/login", (request, response) => {
     response.status(200).render("login.hbs", {
       layout: "layout1",
       title: "Login",
@@ -140,8 +148,7 @@ const hbs = expressHbs.create({
       });
     }else{
       res.status(404).send("Contact not found");
-    }
-    
+    }   
   });
   app.use("/api/crm", crmRouter);
 
@@ -160,7 +167,6 @@ const hbs = expressHbs.create({
     res.status(404).send("404 Page not found");
   });
 
-  app.listen(port, () => {
+  app.listen(8080, () => {
     console.log("server running");
   });
-
