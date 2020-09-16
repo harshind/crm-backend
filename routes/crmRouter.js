@@ -4,12 +4,135 @@ const {sign, verify} = require("../utils/jwtservice")
 const Contact = require("../models/contacts");
 const Lead = require("../models/leadsModel")
 const Service = require("../models/serviceRequest")
-const User = require("../models/userModel")
+const User = require("../models/userModel");
+const { sequelize } = require("sequelize");
+const { Op } = require("sequelize");
+//const { Json } = require("sequelize/types/lib/utils");
 
 const crmRouter = express.Router();
 
+const getServiceChartdata = async ()=>{
+  const data = [];
+  //'Created', 'Open', 'InProgress','Released','Cancelled','Completed'
+  const created = await Service.count({
+    where: {
+      status: {
+        [Op.eq]: "Created"
+      }
+    }
+  });
+  const Open = await Service.count({
+    where: {
+      status: {
+        [Op.eq]: "Open"
+      }
+    }
+  });
+  const Completed = await Service.count({
+    where: {
+      status: {
+        [Op.eq]: "Completed"
+      }
+    }
+  });
+  const Cancelled= await Service.count({
+    where: {
+      status: {
+        [Op.eq]: "Cancelled"
+      }
+    }
+  });
+  const Released = await Service.count({
+    where: {
+      status: {
+        [Op.eq]: "Released"
+      }
+    }
+  });
+  const InProgress = await Service.count({
+    where: {
+      status: {
+        [Op.eq]: "InProgress"
+      }
+    }
+  });
+  data.push(created);
+  data.push(Open);
+  data.push(InProgress);
+  data.push(Released);
+  data.push(Cancelled);
+  data.push(Completed);
+  console.log(data);
+  return data;
+}
+
+const getLeadChartdata = async ()=>{
+  const data = [];
+  const New = await Lead.count({
+    where: {
+      status: {
+        [Op.eq]: "New"
+      }
+    }
+  });
+  const Contacted = await Lead.count({
+    where: {
+      status: {
+        [Op.eq]: "Contacted"
+      }
+    }
+  });
+  const Quallified = await Lead.count({
+    where: {
+      status: {
+        [Op.eq]: "Qualified"
+      }
+    }
+  });
+  const Lost= await Lead.count({
+    where: {
+      status: {
+        [Op.eq]: "Lost"
+      }
+    }
+  });
+  const Cancelled = await Lead.count({
+    where: {
+      status: {
+        [Op.eq]: "Cancelled"
+      }
+    }
+  });
+  const Completed = await Lead.count({
+    where: {
+      status: {
+        [Op.eq]: "Confirmed"
+      }
+    }
+  });
+  data.push(parseInt(JSON.stringify(JSON.parse(New)), 10));
+  data.push(parseInt(JSON.stringify(JSON.parse(Contacted)), 10));
+  data.push(parseInt(JSON.stringify(JSON.parse(Quallified)), 10));
+  data.push(parseInt(JSON.stringify(JSON.parse(Lost)), 10));
+  data.push(parseInt(JSON.stringify(JSON.parse(Cancelled)), 10));
+  data.push(parseInt(JSON.stringify(JSON.parse(Completed)), 10));
+  console.log(data);
+  return data;
+}
+
+
+
+const getAllcounts = async () =>{
+  const data=[]
+  const Ccount  = await Contact.count({})
+  const Lcount = await Lead.count({})
+  const Scount  = await Service.count({})
+  data.push(...[Ccount,Lcount,Scount]);
+  console.log(Ccount)
+  return data
+}
 const getAllContacts = async () => {
-    const result = await Contact.findAll({
+  const result  = await Contact.findAll({
         limit: 10,
         order: [
           ['id', 'ASC'],
@@ -28,7 +151,7 @@ const getAllLeads = async () => {
 };
 
 const getAllServiceRequest = async () => {
-    const result = await Service.findAll({
+  const result  = await Service.findAll({
         limit: 10,
         order: [
           ['id', 'ASC'],
@@ -58,7 +181,7 @@ const getLeadById = async id => {
 
 
 crmRouter
-  .post("/login", async (req, res) => {
+.post("/login", async (req, res) => {
     const { username, password } = req.body;
     const result = await User.findOne({
       where: {
@@ -67,7 +190,8 @@ crmRouter
     });
     const user = result.get();
     const id = user.id;
-    const sub = user.type
+    const sub = user.type;
+    console.log(user)
     if (user) {
       const isValidPassword = compareHash(password, user.password);
       if (isValidPassword) {
@@ -76,7 +200,8 @@ crmRouter
           username,
           id: id
         });
-        res.cookie("jwt", token, { httpOnly: true,secure: true,sameSite:None});
+        console.log(token)
+        res.cookie("jwt", token, { httpOnly: true});
         res.status(200).redirect("/dashboard");
       } else {
         res.status(401).send("Invalid User");
@@ -189,6 +314,9 @@ crmRouter
     getAllServiceRequest,
     getLeadById,
     getSrById,
-    getContactById
+    getContactById,
+    getAllcounts,
+    getServiceChartdata,
+    getLeadChartdata
   };
   

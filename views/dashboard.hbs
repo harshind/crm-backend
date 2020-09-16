@@ -1,82 +1,109 @@
 <div class="container">
-  <h1>Service Request</h1>
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Title</th>
-        <th scope="col">Status</th>
-        <th scope="col">Type</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each sr}}
-      <tr>
-        <th scope="row">{{this.id}}</th>
-        <td>{{this.title}}</td>
-        <td>{{this.status}}</td>
-        <td>{{this.type}}</td>
-        <td><a href="/update-sr/{{this.id}}">Edit</a></td>
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
+  <div class="row">
+    <div class="col-lg-6">
+      <canvas id="mysrChart" style="height:200px;"></canvas>
+    </div>
+     <div class="col-lg-6">
+       <canvas id="myldChart" style="height:200px;"></canvas>
+     </div>
+  </div>
 </div>
-<div class="container">
-  <h1>Contact</h1>
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">First Name</th>
-        <th scope="col">Last Name</th>
-        <th scope="col">Email</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each contact}}
-      <tr>
-        <th scope="row">{{this.id}}</th>
-        <td>{{this.firstName}}</td>
-        <td>{{this.lastName}}</td>
-        <td>{{this.email}}</td>
-        {{#if isManager }}
-        <td><a href="/update-contact/{{this.id}}">Edit</a></td>
-        {{/if}}
-        {{#if isAdmin }}
-        <td><a href="/update-contact/{{this.id}}">Edit</a></td>
-        {{/if}}
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
-</div>
-<div class="container">
-  <h1>Lead</h1>
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Name</th>
-        <th scope="col">Status</th>
-        <th scope="col">ContactId</th>
-        <th scope="col">Close Date</th>
-        <th scope="col">Amount</th>
 
-      </tr>
-    </thead>
-    <tbody>
-      {{#each lead}}
-      <tr>
-        <th scope="row">{{this.id}}</th>
-        <td>{{this.name}}</td>
-        <td>{{this.status}}</td>
-        <td>{{this.contactId}}</td>
-        <td>{{this.closeDate}}</td>
-        <td>{{this.amount}}</td>
-        <td><a href="/update-leads/{{this.id}}">Edit</a></td>
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
-</div>
+
+<script>
+  const service = [{{sr}}];
+  const lead = [{{ ld }}];
+  const data = {
+    datasets: [{
+      data: service,
+      backgroundColor: [
+        'rgb(255, 26, 26)',
+        'rgb(102, 255, 51)',
+        'rgb(255, 255, 0)',
+        'rgb(0, 102, 255)'
+      ],
+      borderColor: 'rgb(255, 99, 132)',
+
+    }],
+
+    // These labels appear in the legend and in the tooltips when hovering different arcs
+    labels: [
+      'Created',
+      'Open',
+      'InProgress',
+      'Released',
+      'Cancelled',
+      'Completed'
+    ]
+  }
+  const bardata = {
+    datasets: [{
+      backgroundColor: [
+        'rgb(255, 26, 26)',
+        'rgb(102, 255, 51)',
+        'rgb(255, 255, 0)',
+        'rgb(0, 102, 255)'
+      ],
+      borderColor: 'rgb(255, 99, 132)',
+      data: lead,
+
+    }],
+    labels: [
+      "New",
+      "Contacted",
+      "Qualified",
+      "Lost",
+      "Cancelled",
+      "Completed"
+    ]
+  };
+  const options = {}
+  var ctx = document.getElementById('mysrChart').getContext('2d');
+  var mysrChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: data,
+    options: options
+  });
+  var ctb = document.getElementById('myldChart').getContext('2d');
+  var myldChart = new Chart(ctb, {
+    type: 'doughnut',
+    data: bardata,
+    options: options
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <!-- jQuery Custom Scroller CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar, #content').toggleClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>

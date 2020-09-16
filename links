@@ -1,0 +1,14 @@
+Heroku link
+
+https://obscure-fjord-59024.herokuapp.com/
+
+
+git link by heroku
+https://git.heroku.com/obscure-fjord-59024.git
+
+
+netlify link:
+
+
+
+require('dotenv').config({ path: 'ENV_FILENAME' });

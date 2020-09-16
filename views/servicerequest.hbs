@@ -1,30 +1,39 @@
-<div class="container">
-  <h1></h1>
-  <form id="sr-form" action="{{action}}" method="{{method}}" _method="{{method}}">
-    <label for="title">Title:</label>
-    <input type="text" id="fname" name="title" value="{{student.firstName}}" placeholder="First Name" required />
-    <br />
-    <label for="duedate">Due Date:</label>
-    <input type="text" id="lname" name="dueDate" value="{{student.lastName}}" placeholder="Last Name" required />
-    <br />
-    <label for="type">Level:</label>
-    <select class="custom-select" id="type" size="3" name="type">
-      <option value="level-1" {{#if (ifEquality sr.type "level-1")}}selected{{/if}}>Level 1</option>
-      <option value="level-2" {{#if (ifEquality sr.type "level-2")}}selected{{/if}}>Level 2</option>
-      <option value="level-3" {{#if (ifEquality sr.type "level-3")}}selected{{/if}}>Level 3</option>
-    <br />
-    <label for="status">Status:</label>
-    <select class="custom-select" name="status" id="status" size="3">
-      <option value="New" {{#if (ifEquality sr.status "Open")}}selected{{/if}}>Open</option>
-      <option value="Confirmed" {{#if (ifEquality sr.status "In Progress")}}selected{{/if}}>In Progress</option>
-      <option value="Lost" {{#if (ifEquality sr.status "Lost")}}selected{{/if}}>Created</option>
-      <option value="Contacted" {{#if (ifEquality sr.status "Realeased")}}selected{{/if}}>Realeased</option>
-      <option value="Cancelled" {{#if (ifEquality sr.status "Cancelled")}}selected{{/if}}>Cancelled</option>
-      <option value="Qualified" {{#if (ifEquality sr.status "Completed")}}selected{{/if}}>Completed</option>
-    </select>
-    <br>
-    <input class="btn btn-primary" type="submit" value="Add Student" />
-  </form>
+<<div class="wrapper" style="background-image: url('static/img/bg-registration-form-2.jpg');">
+  <div class="inner">
+    <form id="sr-form" action="{{action}}" method="{{method}}">
+      <h3>Service Request Form</h3>
+      <div class="form-group">
+        <div class="form-wrapper">
+          <label for="title">Title:</label>
+          <input type="text" id="title"  class="form-control" name="title" value="{{sr.firstName}}" placeholder="Title of the Service Request " required />
+        </div>
+        <div class="form-wrapper">
+          <label for="duedate">Due Date:</label>
+          <input type="text" id="ddate"  class="form-control" name="dueDate" value="{{sr.lastName}}" placeholder="Due Date" required />
+        </div>
+      </div>
+      <div class="form-wrapper">
+        <label for="type">Level:</label>
+        <select id="type"  class="form-control" name="type">
+          <option value="level-1" {{#if (ifEquality sr.type "level-1")}}selected{{/if}}>Level 1</option>
+          <option value="level-2" {{#if (ifEquality sr.type "level-2")}}selected{{/if}}>Level 2</option>
+          <option value="level-3" {{#if (ifEquality sr.type "level-3")}}selected{{/if}}>Level 3</option>
+        </select>
+      </div>
+      <div class="form-wrapper">
+        <label for="status">Status:</label>
+        <select class="form-control" name="status" id="status">
+          <option value="New" {{#if (ifEquality sr.status "Open")}}selected{{/if}}>Open</option>
+          <option value="Confirmed" {{#if (ifEquality sr.status "In Progress")}}selected{{/if}}>In Progress</option>
+          <option value="Lost" {{#if (ifEquality sr.status "Lost")}}selected{{/if}}>Created</option>
+          <option value="Contacted" {{#if (ifEquality sr.status "Realeased")}}selected{{/if}}>Realeased</option>
+          <option value="Cancelled" {{#if (ifEquality sr.status "Cancelled")}}selected{{/if}}>Cancelled</option>
+          <option value="Qualified" {{#if (ifEquality sr.status "Completed")}}selected{{/if}}>Completed</option>
+        </select>
+      </div>
+    <button>{{btnName}}</button>
+    </form>
+  </div>
 </div>
 
 <script>
